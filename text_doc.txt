@@ -1,0 +1,72 @@
+Английский тематический словарь / справочник
+
+Программа принимает слово на Английском и выдает его определение на Английском языке (часто несколько определений).
+В случае если слово введено с ошибкой, программа предложит ближайшее похожее слово: "Может Вы имели ввиду...". Примерно как Google поиск.
+В случае если слово не сущесвтвует, будет выведено сообщение: "Такого слова не существует. Пожалуйста, проверьте написание."
+Слова можно вводить как в ВЕРХНЕМ, так и нижнем регистре, а так же в СмеШАнноМ реГИстрЕ.
+
+В качестве хранилища слов и определений используем JSON файл data.json, который можно скачать в Интернете.
+Загрузим data.json в Phyton в качестве словаря для лекого доступа к ключам и значениям.
+
+import json  # чтобы загрузить JSON в Python словарь, имортируем стандартную библиотеку json
+data = json.load(open("data.json"))  # сохраним файл в переменной с помощью метода load. Данный метод в качестве 
+аргумента принимает file-like object. Соответственно, чтобы создать file-like object, нужен open метод.
+
+Создадим функцию, которая принимает ключ и возвращает значение независимо от регистра.
+def translate(word):
+    word = word.lower()
+    if word in data:
+        return data[word]
+    else:
+        return "The word doesn't exitst. Please double check it."
+
+word = input("Enter word: ")
+print(translate(word))
+
+
+Вычисление сходства между словами
+import difflib  # стандартная библиотека Python для сравнения схожести текста
+from difflib import get_close_matches # метод вернет наиболее похожее слово из ключей словаря data
+
+Доработка функции
+
+elif len(get_close_matches(word, data.keys())) > 0:
+    return "Did you mean %s instead?" % get_close_matches(word, data.keys())[0]
+
+Метод get_close_match() создает список. Если этот список пустой, значит длина списка равна нулю.
+Если в списке есть элементы, длина будет больше нуля. В данном условии мы проверяем, есть ли элементы в этом списке. 
+Если в списке есть элементы, это означает, что в словаре (data) были найдены совпадения для слова.
+
+
+Получение подтверждения пользователя
+
+    elif len(get_close_matches(word, data.keys())) > 0:
+        yn = input("Did you mean %s instead? Enter Y if yes, or N if no: " % get_close_matches(word, data.keys())[0])
+        if yn == "Y":
+            return data[get_close_matches(word, data.keys())[0]]
+        elif yn == "N":
+            return "The word doesn't exist. Please double check it."
+        else:
+            return "We didn't understand your entry."
+
+Убедимся, что программа возвращает определения слов, начинающихся с заглавной буквы (например, Paris, Italy):
+    elif word.title() in data:
+        return data[word.title()]
+
+Убедимся, что программа возвращает определение акронимов (например, USA или NASA).
+    elif word.upper() in data:
+        return data[word.upper()]
+
+
+Оптимизируем выходные данные
+
+На текущий момент определения выводятся в виде списка строк. Мы хотим, чтобы строки начинались с новой строки, в случае, 
+когда у слова больше одного определения. В случае если определение одно, уберем кавычки и квадратные скобки.
+
+output = translate(word)
+
+if type(output) == list:
+    for item in output:
+        print(item)
+else:
+    print(output)
