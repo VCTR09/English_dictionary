@@ -9,7 +9,7 @@
 
 * Слова можно вводить как в ВЕРХНЕМ, так и в нижнем регистре, а так же в СмеШАнноМ реГИстрЕ.
 
-![IMG_1889](https://user-images.githubusercontent.com/97599612/167587773-92bdeaec-e037-4da9-b05f-18cd22ecfe79.JPG)
+<img width="1065" alt="dictionary" src="https://user-images.githubusercontent.com/97599612/168227247-45d7b3bf-c037-4082-b832-6cde7068e3be.png">
 
 ## Создание:
 
